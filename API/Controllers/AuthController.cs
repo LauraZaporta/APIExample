@@ -28,7 +28,7 @@ namespace API.Controllers
         [HttpPost("registre")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
-            var usuari = new User { UserName = model.Username, Email = model.Email };
+            var usuari = new User { UserName = model.Username, Email = model.Email, Name = model.Username };
             var resultat = await _userManager.CreateAsync(usuari, model.Password);
 
             if (resultat.Succeeded)

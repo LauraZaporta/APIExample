@@ -10,6 +10,7 @@ using System.Text;
 using System;
 using API.Model;
 using Microsoft.Build.Evaluation;
+using API.Hubs;
 
 namespace API
 {
@@ -110,7 +111,22 @@ namespace API
                 });
             });
 
-            //********
+            // ????
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.WithOrigins("https://localhost:7080") // Adreça client razor
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
+            });
+
+            // S¡afegiex signal
+            builder.Services.AddSignalR();
+
+            //*******
             var app = builder.Build();
             //*******
 
@@ -126,6 +142,7 @@ namespace API
             }
 
             // Configure the HTTP request pipeline.
+            // Order important
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -138,6 +155,9 @@ namespace API
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.UseCors();
+            app.MapHub<XatHub>("/xatuwu");
 
             app.Run();
         }
